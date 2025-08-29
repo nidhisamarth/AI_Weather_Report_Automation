@@ -1,0 +1,167 @@
+{
+  "name": "AI_WeatherReport",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4833d225-becf-4985-9fa1-286d9649aeb7",
+      "name": "When chat message received",
+      "webhookId": "f598cf80-40f9-4dbb-bcad-1df9111023c9"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "c4e6877e-98ed-42cd-830d-4d68451124fa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        208
+      ],
+      "id": "ec503a1f-9998-4e86-b060-8c15736cf344",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "toolDescription": "getting weather information",
+        "url": "https://open-meteo.com/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        240
+      ],
+      "id": "bd689db8-859e-4fce-9483-f6f3baaf0e9f",
+      "name": "Get_WeatherReport"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "59c58440-d03c-4b62-88b3-c7bdaa92af4a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        256
+      ],
+      "id": "6569d529-41d2-48cb-8a26-e6bb496e24d3",
+      "name": "Send a message in Gmail",
+      "webhookId": "d14399d8-29f9-4610-a70f-449d2d128ce3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iDCun2SclAA04idt",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_WeatherReport": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dfd9aa74-c664-41a6-a6c0-2e50c893ccb5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7acd65e5c7d872afed7fb747d6bc6e44a9837d450604aba2550afc0a37f0ce9f"
+  },
+  "id": "ehsRdi7vt58UVHgw",
+  "tags": []
+}
